@@ -5,7 +5,7 @@ Created on Wed Apr 25 15:19:25 2018
 @author: zou
 """
 import pygame, random
-import thorpy#S: imported thorpy
+import thorpy
 import numpy as np
 
 class Settings:
