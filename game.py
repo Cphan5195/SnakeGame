@@ -79,7 +79,10 @@ class Snake:
         if self.facing == 'down':
             self.position[1] += 1
         self.segments.insert(0, list(self.position))
-        
+
+
+
+
 class Strawberry():
     def __init__(self, settings):
         self.settings = settings
@@ -162,6 +165,10 @@ class Game:
             self.strawberry.random_pos(self.snake)
             reward = 1
             self.snake.score += 1
+            
+            
+
+            
         else:
             self.snake.segments.pop()
             reward = 0

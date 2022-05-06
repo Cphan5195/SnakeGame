@@ -30,10 +30,11 @@ rect_len = game.settings.rect_len
 snake = game.snake
 pygame.init()
 fpsClock = pygame.time.Clock()
-screen = pygame.display.set_mode((game.settings.width * 15, game.settings.height * 15))
+screen = pygame.display.set_mode((game.settings.width * 15, game.settings.height * 15))# T. create the screen/ can be modified bigger
 background = pygame.Surface((game.settings.width * 15, game.settings.height * 15))#added background as new way to fill the UI
 background.fill((0,0,100))
 pygame.display.set_caption('Gluttonous')
+
 
 thorpy.theme.set_theme('human')
 slider = thorpy.SliderX(100, (12, 35), "FUNCTIONAL")
@@ -117,17 +118,19 @@ def initial_interface():
 
 
 
-def game_loop(player, fps=10):
+def game_loop(player, fps=10):        #fps start with 10
     game.restart_game()
+    speed = fps                     #Tien. added a variable for fps to edit the speed, 
 
     while not game.game_end():
 
         pygame.event.pump()
 
         move = human_move()
-        fps = 5
 
-        game.do_move(move)
+
+        if(game.do_move(move)==1): #Tien. speed increase when the score increases
+            speed+=5              #Tien. if statement added, to method "do_move" (whenever it returns to 1(scores)) fps increment by 5
 
         screen.fill(black)
 
@@ -137,7 +140,7 @@ def game_loop(player, fps=10):
 
         pygame.display.flip()
 
-        fpsClock.tick(fps)
+        fpsClock.tick(speed)
 
     crash()
 
