@@ -5,7 +5,7 @@ Created on Wed Apr 25 15:19:25 2018
 @author: zou
 """
 import pygame, random
-import thorpy
+import thorpy#S: imported thorpy
 import numpy as np
 
 class Settings:
@@ -79,7 +79,10 @@ class Snake:
         if self.facing == 'down':
             self.position[1] += 1
         self.segments.insert(0, list(self.position))
-        
+
+
+
+
 class Strawberry():
     def __init__(self, settings):
         self.settings = settings
@@ -162,6 +165,10 @@ class Game:
             self.strawberry.random_pos(self.snake)
             reward = 1
             self.snake.score += 1
+            
+            
+
+            
         else:
             self.snake.segments.pop()
             reward = 0
@@ -186,4 +193,7 @@ class Game:
         font = pygame.font.SysFont(None, 25)
         text = font.render('Score: ' + str(self.snake.score), True, color)
         screen.blit(text, (0, 0))
+
+    def snake_score(self)#S: Added a function that should return the current snake score
+        return self.snake.score
 

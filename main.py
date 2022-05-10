@@ -71,6 +71,17 @@ def message_display(text, x, y, color=black):
     screen.blit(text_surf, text_rect)
     # pygame.display.update() #solved for blink bug on the front page
 
+# S: Duplicated message_display in order to use a separate function to display the crash score when the player loses
+
+
+def message_display_crash(text, x, y, color=black):
+    # S: Smaller font than the original
+    large_text = pygame.font.SysFont('comicsansms', 30)
+    text_surf, text_rect = text_objects(text, large_text, color)
+    text_rect.center = (x, y)
+    screen.blit(text_surf, text_rect)
+    pygame.display.update()
+
 
 def button(msg, x, y, w, h, inactive_color, active_color, action=None, parameter=None):
     mouse = pygame.mouse.get_pos()
@@ -98,9 +109,15 @@ def quitgame():
 
 def crash():
     pygame.mixer.Sound.play(crash_sound)
-    message_display('crashed', game.settings.width / 2 * 15,
-                    game.settings.height / 3 * 15, white)
-    time.sleep(1)
+    screen.blit(background, (0, 0))
+    # S: added crashscore to print to player the score they got
+    crashscore = str(game.snake_score())
+    # S: added crashstring to print to player with good formatting
+    crashstring = 'Crashed: Your score was ' + crashscore
+    # S: replaced original string with crashstring, calling the duplicated function
+    message_display_crash(crashstring, game.settings.width /
+                          2 * 15, game.settings.height / 3 * 15, white)
+    time.sleep(5)  # S: made the text stay longer on screen
 
 
 def initial_interface():
@@ -110,11 +127,13 @@ def initial_interface():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            menu.react(event)  # S: thorpy ui code?
+            # S: thorpy ui code, which will be used later with variable set by user
+            menu.react(event)
 
+        # S: this is the background variable as earlier used, to improve how the screen is displayed
         screen.blit(background, (0, 0))
-        message_display('Gluttonous', game.settings.width / 2 *
-                        15, game.settings.height / 4 * 15)  # blink bug
+        message_display('Gluttonous', game.settings.width /
+                        2 * 15, game.settings.height / 4 * 15)
 
         button('Go!', 80, 240, 80, 40, green, bright_green, game_loop, 'human')
         button('Quit', 270, 240, 80, 40, red, bright_red, quitgame)
@@ -138,7 +157,7 @@ def game_loop(player, fps=10):  # fps start with 10
 
         if(game.do_move(move) == 1):  # Tien. speed increase when the score increases
             # Tien. if statement added, to method "do_move" (whenever it returns to 1(scores)) fps increment by 5
-            speed += 0.5
+            speed += 0.8
 
         screen.fill(gamebackground)
         # add game background

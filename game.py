@@ -193,3 +193,6 @@ class Game:
         text = font.render('Score: ' + str(self.snake.score), True, color)
         screen.blit(text, (0, 0))
 
+    def snake_score(self): #S: Added a function that should return the current snake score
+        return self.snake.score
+
