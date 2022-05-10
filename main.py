@@ -5,8 +5,9 @@ Created on Wed May 16 15:22:20 2018
 @author: zou
 """
 
+from turtle import back
 import pygame
-import thorpy#S: imported thorpy
+import thorpy  # S: imported thorpy
 import time
 from pygame.locals import KEYDOWN, K_RIGHT, K_LEFT, K_UP, K_DOWN, K_ESCAPE
 from pygame.locals import QUIT
@@ -14,6 +15,8 @@ from pygame.locals import QUIT
 from game import Game
 
 black = pygame.Color(0, 0, 0)
+# add game background
+gamebackground = pygame.Color(124, 194, 72)
 white = pygame.Color(255, 255, 255)
 
 green = pygame.Color(0, 200, 0)
@@ -30,9 +33,13 @@ rect_len = game.settings.rect_len
 snake = game.snake
 pygame.init()
 fpsClock = pygame.time.Clock()
-screen = pygame.display.set_mode((game.settings.width * 15, game.settings.height * 15))# T. create the screen/ can be modified bigger
-background = pygame.Surface((game.settings.width * 15, game.settings.height * 15))#added background as new way to fill the UI
-background.fill((0,0,100))
+# T. create the screen/ can be modified bigger
+screen = pygame.display.set_mode(
+    (game.settings.width * 15, game.settings.height * 15))
+# added background as new way to fill the UI
+background = pygame.Surface(
+    (game.settings.width * 15, game.settings.height * 15))
+background.fill((0, 0, 100))
 pygame.display.set_caption('Gluttonous')
 
 
@@ -40,9 +47,9 @@ thorpy.theme.set_theme('human')
 slider = thorpy.SliderX(100, (12, 35), "FUNCTIONAL")
 line = thorpy.Line(200, "h")
 checker_radio = thorpy.Checker("hard", type_="radio")
-box = thorpy.Box(elements=[slider,line,checker_radio])
+box = thorpy.Box(elements=[slider, line, checker_radio])
 menu = thorpy.Menu(box)
-#Sharang: trying out thorpy for GUI element addition. Above is a test slider and below is initialising it, go to thorpy documentation to understand better
+# Sharang: trying out thorpy for GUI element addition. Above is a test slider and below is initialising it, go to thorpy documentation to understand better
 for element in menu.get_population():
     element.surface = screen
 box.set_topleft((100, 100))
@@ -62,7 +69,7 @@ def message_display(text, x, y, color=black):
     text_surf, text_rect = text_objects(text, large_text, color)
     text_rect.center = (x, y)
     screen.blit(text_surf, text_rect)
-    pygame.display.update()
+    # pygame.display.update() #solved for blink bug on the front page
 
 
 def button(msg, x, y, w, h, inactive_color, active_color, action=None, parameter=None):
@@ -91,7 +98,8 @@ def quitgame():
 
 def crash():
     pygame.mixer.Sound.play(crash_sound)
-    message_display('crashed', game.settings.width / 2 * 15, game.settings.height / 3 * 15, white)
+    message_display('crashed', game.settings.width / 2 * 15,
+                    game.settings.height / 3 * 15, white)
     time.sleep(1)
 
 
@@ -102,25 +110,25 @@ def initial_interface():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            menu.react(event)#S: thorpy ui code?
-            
+            menu.react(event)  # S: thorpy ui code?
 
         screen.blit(background, (0, 0))
-        message_display('Gluttonous', game.settings.width / 2 * 15, game.settings.height / 4 * 15)
+        message_display('Gluttonous', game.settings.width / 2 *
+                        15, game.settings.height / 4 * 15)  # blink bug
 
         button('Go!', 80, 240, 80, 40, green, bright_green, game_loop, 'human')
         button('Quit', 270, 240, 80, 40, red, bright_red, quitgame)
-        box.set_topleft((game.settings.width / 4 * 15, game.settings.height / 4 * 15))
+        box.set_topleft((game.settings.width / 4 * 15,
+                        game.settings.height / 4 * 15))
         box.blit()
         box.update()
-        pygame.display.update()
+        pygame.display.flip()
         pygame.time.Clock().tick(15)
 
 
-
-def game_loop(player, fps=10):        #fps start with 10
+def game_loop(player, fps=10):  # fps start with 10
     game.restart_game()
-    speed = fps                     #Tien. added a variable for fps to edit the speed, 
+    speed = fps  # Tien. added a variable for fps to edit the speed,
 
     while not game.game_end():
 
@@ -128,11 +136,13 @@ def game_loop(player, fps=10):        #fps start with 10
 
         move = human_move()
 
+        if(game.do_move(move) == 1):  # Tien. speed increase when the score increases
+            # Tien. if statement added, to method "do_move" (whenever it returns to 1(scores)) fps increment by 5
+            speed += 0.5
 
-        if(game.do_move(move)==1): #Tien. speed increase when the score increases
-            speed+=5              #Tien. if statement added, to method "do_move" (whenever it returns to 1(scores)) fps increment by 5
-
-        screen.fill(black)
+        screen.fill(gamebackground)
+        # add game background
+        # can be change through gamebackground
 
         game.snake.blit(rect_len, screen)
         game.strawberry.blit(screen)
@@ -140,7 +150,7 @@ def game_loop(player, fps=10):        #fps start with 10
 
         pygame.display.flip()
 
-        fpsClock.tick(speed)
+        fpsClock.tick(speed)  # switch parameter (from (fps) to (speed)
 
     crash()
 

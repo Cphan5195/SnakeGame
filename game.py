@@ -166,7 +166,6 @@ class Game:
             reward = 1
             self.snake.score += 1
             
-            
 
             
         else:
