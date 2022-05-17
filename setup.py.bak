@@ -4,9 +4,9 @@ from cx_Freeze import setup, Executable
 # Dependencies are automatically detected, but it might need fine tuning.
 # "packages": ["os"] is used as example only
 build_exe_options = {
-    "packages": ["os", "sys", "thorpy", "pygame", "numpy"], 
+    "packages": ["os", "sys", "thorpy", "pygame", "numpy", "tkinter"], 
     "excludes": [""],
-    "includes": ["thorpy", "pygame", "numpy"],
+    "includes": ["thorpy", "pygame", "numpy", "tkinter"],
     "include_files": ["images", "sound"],
     "include_msvcr": True
 }
