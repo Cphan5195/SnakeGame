@@ -5,6 +5,8 @@ Created on Wed May 16 15:22:20 2018
 @author: zou
 """
 
+from cgitb import grey
+from tkinter import N
 from turtle import back
 import pygame
 import thorpy  # S: imported thorpy
@@ -27,6 +29,7 @@ blue = pygame.Color(32, 178, 170)
 bright_blue = pygame.Color(32, 200, 200)
 yellow = pygame.Color(255, 205, 0)
 bright_yellow = pygame.Color(255, 255, 0)
+gray = pygame.Color(80, 80, 80)
 
 game = Game()
 rect_len = game.settings.rect_len
@@ -42,19 +45,18 @@ background = pygame.Surface(
 background.fill((0, 0, 100))
 pygame.display.set_caption('Gluttonous')
 
+# *******************************************************************
+
 
 thorpy.theme.set_theme('human')
-slider = thorpy.SliderX(100, (12, 35), "FUNCTIONAL")
-line = thorpy.Line(200, "h")
-checker_radio = thorpy.Checker("hard", type_="radio")
-box = thorpy.Box(elements=[slider, line, checker_radio])
-menu = thorpy.Menu(box)
+line = thorpy.Line(400, 'h')
+
+
+menu = thorpy.Menu()
 # Sharang: trying out thorpy for GUI element addition. Above is a test slider and below is initialising it, go to thorpy documentation to understand better
 for element in menu.get_population():
     element.surface = screen
-box.set_topleft((100, 100))
-box.blit()
-box.update()
+
 
 crash_sound = pygame.mixer.Sound('./sound/crash.wav')
 
@@ -69,7 +71,8 @@ def message_display(text, x, y, color=black):
     text_surf, text_rect = text_objects(text, large_text, color)
     text_rect.center = (x, y)
     screen.blit(text_surf, text_rect)
-    # pygame.display.update() #solved for blink bug on the front page
+
+    # pygame.display.update()  # solved for blink bug on the front page
 
 # S: Duplicated message_display in order to use a separate function to display the crash score when the player loses
 
@@ -82,13 +85,6 @@ def message_display_crash(text, x, y, color=black):
     screen.blit(text_surf, text_rect)
     pygame.display.update()
 
-#S: Duplicated message_display in order to use a separate function to display the crash score when the player loses
-def message_display_crash(text, x, y, color=black):
-    large_text = pygame.font.SysFont('comicsansms', 30)#S: Smaller font than the original
-    text_surf, text_rect = text_objects(text, large_text, color)
-    text_rect.center = (x, y)
-    screen.blit(text_surf, text_rect)
-    pygame.display.update()
 
 def button(msg, x, y, w, h, inactive_color, active_color, action=None, parameter=None):
     mouse = pygame.mouse.get_pos()
@@ -113,11 +109,36 @@ def quitgame():
     pygame.quit()
     quit()
 
+# ***************************************************************** new-page (level)
+
+
+def level_page():
+    screen.fill(gray)
+    pygame.draw.rect(screen, gray, (200, 150, 100, 50))
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+            menu.react(event)
+
+        message_display('Choose level', game.settings.width /
+                        2 * 15, game.settings.height / 4 * 15)
+        button('easy', 50, 200, 60, 40, yellow,
+               bright_yellow, game_loop, {"speed": 15})
+        button('medium', 170, 200, 80, 40,
+               blue, bright_blue, game_loop,  {"speed": 20})
+        button('hard', 300, 200, 60, 40, red,
+               bright_red, game_loop,  {"speed": 25})
+
+        pygame.display.flip()
+        pygame.time.Clock().tick(15)
+
+# *****************************************************************
+
 
 def crash():
     pygame.mixer.Sound.play(crash_sound)
     screen.blit(background, (0, 0))
-<<<<<<< HEAD
     # S: added crashscore to print to player the score they got
     crashscore = str(game.snake_score())
     # S: added crashstring to print to player with good formatting
@@ -126,12 +147,7 @@ def crash():
     message_display_crash(crashstring, game.settings.width /
                           2 * 15, game.settings.height / 3 * 15, white)
     time.sleep(5)  # S: made the text stay longer on screen
-=======
-    crashscore = str(game.snake_score())#S: added crashscore to print to player the score they got
-    crashstring = 'Crashed: Your score was ' + crashscore #S: added crashstring to print to player with good formatting
-    message_display_crash(crashstring, game.settings.width / 2 * 15, game.settings.height / 3 * 15, white) #S: replaced original string with crashstring, calling the duplicated function
-    time.sleep(5)#S: made the text stay longer on screen
->>>>>>> 82ef904ee655034c6e14ce8f90abdbbe67b8c573
+    initial_interface()
 
 
 def initial_interface():
@@ -141,35 +157,31 @@ def initial_interface():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-<<<<<<< HEAD
             # S: thorpy ui code, which will be used later with variable set by user
             menu.react(event)
 
         # S: this is the background variable as earlier used, to improve how the screen is displayed
         screen.blit(background, (0, 0))
+
         message_display('Gluttonous', game.settings.width /
                         2 * 15, game.settings.height / 4 * 15)
-=======
-            menu.react(event)#S: thorpy ui code, which will be used later with variable set by user
-            
 
-        screen.blit(background, (0, 0))#S: this is the background variable as earlier used, to improve how the screen is displayed
-        message_display('Gluttonous', game.settings.width / 2 * 15, game.settings.height / 4 * 15)
->>>>>>> 82ef904ee655034c6e14ce8f90abdbbe67b8c573
-
-        button('Go!', 80, 240, 80, 40, green, bright_green, game_loop, 'human')
+        button('Go!', 80, 240, 80, 40, green, bright_green, level_page)
         button('Quit', 270, 240, 80, 40, red, bright_red, quitgame)
-        box.set_topleft((game.settings.width / 4 * 15,
-                        game.settings.height / 4 * 15))
-        box.blit()
-        box.update()
+
         pygame.display.flip()
         pygame.time.Clock().tick(15)
 
 
 def game_loop(player, fps=10):  # fps start with 10
+    speed = 0
+    try:
+
+        # Tien. added a variable for fps to edit the speed,
+        speed = player["speed"]
+    except:
+        speed = fps
     game.restart_game()
-    speed = fps  # Tien. added a variable for fps to edit the speed,
 
     while not game.game_end():
 
