@@ -13,7 +13,7 @@ import thorpy  # S: imported thorpy
 import time
 from pygame.locals import KEYDOWN, K_RIGHT, K_LEFT, K_UP, K_DOWN, K_ESCAPE
 from pygame.locals import QUIT
-
+import pickle  # S: added pickle module for high scores
 from game import Game
 
 black = pygame.Color(0, 0, 0)
@@ -79,7 +79,7 @@ def message_display(text, x, y, color=black):
 
 def message_display_crash(text, x, y, color=black):
     # S: Smaller font than the original
-    large_text = pygame.font.SysFont('comicsansms', 30)
+    large_text = pygame.font.SysFont('comicsansms', 20)
     text_surf, text_rect = text_objects(text, large_text, color)
     text_rect.center = (x, y)
     screen.blit(text_surf, text_rect)
@@ -141,11 +141,43 @@ def crash():
     screen.blit(background, (0, 0))
     # S: added crashscore to print to player the score they got
     crashscore = str(game.snake_score())
+    try:
+        with open('highscores.dat', 'rb') as file:  # S: opens any existing high scores
+            highscores = pickle.load(file)
+    except:
+        # S: minimum of three scores for the top three to prevent errors in access
+        highscores = [0] * 3
+    '''
+    S: Using the pickle method of storing the high scores as an array, the above code loads the existing high scores unless there are none, in which case the array is turned into zeroes
+    '''
+    highscores.append(
+        game.snake_score())  # S: appends the current score to the list of high scores
+    # S: sorts the high scores from highest to lowest
+    highscores = sorted(highscores, reverse=True)
+
     # S: added crashstring to print to player with good formatting
     crashstring = 'Crashed: Your score was ' + crashscore
     # S: replaced original string with crashstring, calling the duplicated function
     message_display_crash(crashstring, game.settings.width /
                           2 * 15, game.settings.height / 3 * 15, white)
+    message_display_crash("TOP THREE BEST SCORES", game.settings.width / 2 *
+                          15, game.settings.height / 3 * 18, white)  # S: heading of scoreboard
+    # S: accessing sorted array to find first place score
+    firststring = '#1: ' + str(highscores[0])
+    # S: accessing sorted array to find second place score
+    secondstring = '#2: ' + str(highscores[1])
+    # S: accessing sorted array to find third place score
+    thirdstring = '#3: ' + str(highscores[2])
+    message_display_crash(firststring, game.settings.width / 2 * 15,
+                          game.settings.height / 3 * 21, white)  # S: displaying first place score
+    message_display_crash(secondstring, game.settings.width / 2 * 15,
+                          game.settings.height / 3 * 24, white)  # S: displaying second place score
+    message_display_crash(thirdstring, game.settings.width / 2 * 15,
+                          game.settings.height / 3 * 27, white)  # S: displaying third place score
+    # S: stores the high score array in the file so that it is stored on disk and not just when the program is executed
+    with open('highscores.dat', 'wb') as file:
+        pickle.dump(highscores, file)
+
     time.sleep(5)  # S: made the text stay longer on screen
     initial_interface()
 
