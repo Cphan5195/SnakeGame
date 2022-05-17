@@ -121,9 +121,9 @@ def crash():
     crashstring = 'Crashed: Your score was ' + crashscore #S: added crashstring to print to player with good formatting 
     message_display_crash(crashstring, game.settings.width / 2 * 15, game.settings.height / 3 * 15, white) #S: replaced original string with crashstring, calling the duplicated function
     message_display_crash("TOP THREE BEST SCORES", game.settings.width / 2 * 15, game.settings.height / 3 * 18, white)#S: heading of scoreboard
-    firststring = '#1: ' + str(highscores[0]))#S: accessing sorted array to find first place score
+    firststring = '#1: ' + str(highscores[0])#S: accessing sorted array to find first place score
     secondstring = '#2: ' + str(highscores[1])#S: accessing sorted array to find second place score
-    thirdstring = '#3: ' + str(highscores[2]))#S: accessing sorted array to find third place score
+    thirdstring = '#3: ' + str(highscores[2])#S: accessing sorted array to find third place score
     message_display_crash(firststring, game.settings.width / 2 * 15, game.settings.height / 3 * 21, white)#S: displaying first place score
     message_display_crash(secondstring, game.settings.width / 2 * 15, game.settings.height / 3 * 24, white)#S: displaying second place score
     message_display_crash(thirdstring, game.settings.width / 2 * 15, game.settings.height / 3 * 27, white)#S: displaying third place score
