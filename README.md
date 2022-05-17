@@ -10,3 +10,5 @@ You will need to modify this code to complete your Project 2 assignment.
 To start the game
 
 	$ python main.py
+	
+To start the executable, double click onto main.exe and run the exe file, which you can do without opening the command line interface.
