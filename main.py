@@ -117,7 +117,7 @@ def quitgame():
 def crash():
     pygame.mixer.Sound.play(crash_sound)
     screen.blit(background, (0, 0))
-<<<<<<< HEAD
+
     # S: added crashscore to print to player the score they got
     crashscore = str(game.snake_score())
     # S: added crashstring to print to player with good formatting
@@ -126,12 +126,10 @@ def crash():
     message_display_crash(crashstring, game.settings.width /
                           2 * 15, game.settings.height / 3 * 15, white)
     time.sleep(5)  # S: made the text stay longer on screen
-=======
     crashscore = str(game.snake_score())#S: added crashscore to print to player the score they got
     crashstring = 'Crashed: Your score was ' + crashscore #S: added crashstring to print to player with good formatting
     message_display_crash(crashstring, game.settings.width / 2 * 15, game.settings.height / 3 * 15, white) #S: replaced original string with crashstring, calling the duplicated function
     time.sleep(5)#S: made the text stay longer on screen
->>>>>>> 82ef904ee655034c6e14ce8f90abdbbe67b8c573
 
 
 def initial_interface():
@@ -141,7 +139,7 @@ def initial_interface():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-<<<<<<< HEAD
+
             # S: thorpy ui code, which will be used later with variable set by user
             menu.react(event)
 
@@ -149,13 +147,13 @@ def initial_interface():
         screen.blit(background, (0, 0))
         message_display('Gluttonous', game.settings.width /
                         2 * 15, game.settings.height / 4 * 15)
-=======
-            menu.react(event)#S: thorpy ui code, which will be used later with variable set by user
+
+        menu.react(event)#S: thorpy ui code, which will be used later with variable set by user
             
 
         screen.blit(background, (0, 0))#S: this is the background variable as earlier used, to improve how the screen is displayed
         message_display('Gluttonous', game.settings.width / 2 * 15, game.settings.height / 4 * 15)
->>>>>>> 82ef904ee655034c6e14ce8f90abdbbe67b8c573
+
 
         button('Go!', 80, 240, 80, 40, green, bright_green, game_loop, 'human')
         button('Quit', 270, 240, 80, 40, red, bright_red, quitgame)
