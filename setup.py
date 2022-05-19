@@ -24,9 +24,9 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(
-    name="SnakeGame",
-    version="1.1",
-    description="Snake Game",
+    name="Gluttonous",
+    version="1.2",
+    description="Snake Game Modified",
     options={"build_exe": build_exe_options, "bdist_msi": bdist_msi_options},
     executables=[Executable("main.py", base=base)],
 )
