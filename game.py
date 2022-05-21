@@ -52,8 +52,8 @@ and then calls the initialise function.
     '''
 
     def initialize(self):
-        self.position = [6, 6]
-        self.segments = [[6 - i, 6] for i in range(3)]
+        self.position = [10, 10]#S: changed from 6 to 10 to make it less punishing on start-up
+        self.segments = [[10 - i, 10] for i in range(3)]#S: as above
         self.score = 0
 
     def blit_body(self, x, y, screen):#S: A simple function that visually displays the body of the snake at a given coordinate

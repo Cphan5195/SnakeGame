@@ -52,8 +52,8 @@ and then calls the initialise function.
     '''
 
     def initialize(self):
-        self.position = [6, 6]
-        self.segments = [[6 - i, 6] for i in range(3)]
+        self.position = [10, 10]
+        self.segments = [[10 - i, 10] for i in range(3)]
         self.score = 0
 
     def blit_body(self, x, y, screen):#S: A simple function that visually displays the body of the snake at a given coordinate
@@ -175,6 +175,13 @@ class Game:
         direction_dict = {value: key for key, value in self.move_dict.items()}
         return direction_dict[direction]
 
+    '''
+    S: The below fuction takes the current direction and gets the input direction, and if the direction is possible 
+    i.e. if it is a 90 degree turn and not an 180 degree turn, the new direction is the current direction and the snake is updated.
+    This function also checks if there is a fruit in the snake's body (inc. head) and adds to the score if so, returning a value 
+    that reflects whether there was a fruit eaten or not.
+    The function also returns differently if the game has ended via the game end function.    
+    '''
     def do_move(self, move):
         move_dict = self.move_dict
 
@@ -205,7 +212,7 @@ class Game:
 
         return reward
 
-    def game_end(self):
+    def game_end(self):#S: A simple 'death' function that returns true if the snake has crashed on any wall or any portion of its own body 
         end = False
         if self.snake.position[0] >= self.settings.width or self.snake.position[0] < 0:
             end = True
@@ -216,10 +223,10 @@ class Game:
 
         return end
 
-    def blit_score(self, color, screen):
+    def blit_score(self, color, screen):#S: A simple function to display the current score of the user.
         font = pygame.font.SysFont(None, 25)
         text = font.render('Score: ' + str(self.snake.score), True, color)
         screen.blit(text, (0, 0))
 
-    def snake_score(self):  # S: Added a function that should return the current snake score
+    def snake_score(self):  # S: Added a function that should return the current snake score as a safe way of doing so.
         return self.snake.score

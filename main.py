@@ -13,6 +13,7 @@ turtle involves basic sprite movement in python
 thorpy is a graphical module added for user interactions
 pygame is a game based module, which involves input from users as seen in the keys imported
 pickle is a module used to store variables to disk i.e. high scores
+sys is a module which contains useful functions that manage system items such as exiting functions.
 game is the other python script which contains the Game class among other relevant functions
 """
 
@@ -25,6 +26,7 @@ import time
 from pygame.locals import KEYDOWN, K_RIGHT, K_LEFT, K_UP, K_DOWN, K_ESCAPE
 from pygame.locals import QUIT
 import pickle  # S: added pickle module for high scores
+import sys #S: added sys to fix exit bugs
 from game import Game
 
 
@@ -139,7 +141,7 @@ def button(msg, x, y, w, h, inactive_color, active_color, action=None, parameter
 #S: A simple function that quits pygame scripts and python scripts when called.
 def quitgame():
     pygame.quit()
-    quit()
+    sys.exit(0)#S: replaced quit with sys.exit to prevent for errors when exiting the game normally
 
 # ***************************************************************** new-page (level)
 
@@ -151,6 +153,7 @@ def level_page():
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
+                sys.exit(0)#S: added to fix error bug on X button in window being clicked
             menu.react(event)
 
         message_display('Choose level', game.settings.width /
@@ -213,6 +216,7 @@ def crash():
         pickle.dump(highscores, file)
 
     time.sleep(5)  # S: made the text stay longer on screen
+    game.snake.initialize()#S: made snake position reset before the interface is called again, solving the repeat-crash bug
     initial_interface()#S: loads the initial interface after the time has passed
 
 
@@ -228,6 +232,7 @@ def initial_interface():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit(0)#S: added to fix error bug on X button in window being clicked
             # S: thorpy ui code, [which will be used later with variable set by user]
             #S: This is now purely cosmetic
             menu.react(event)
@@ -294,6 +299,7 @@ def human_move():
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
+            sys.exit(0)#S: added to fix error bug on X button in window being clicked
 
         elif event.type == KEYDOWN:
             if event.key == K_RIGHT or event.key == ord('d'):
